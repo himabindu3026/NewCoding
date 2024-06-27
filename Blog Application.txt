@@ -1,0 +1,130 @@
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+
+const BlogCreator: React.FC = () => {
+  const [posts, setPosts] = useState([
+    { blogTitle: 'Andhra Pradesh Tourism', shortDescription: 'This Blog covers about Tourism in Andhrapradesh and must watch places.', fullDescription: '' },
+    { blogTitle: 'Karnataka Tourism', shortDescription: 'This Blog covers about Tourism in Karnataka and must watch places.', fullDescription: '' },
+    { blogTitle: 'TamilNadu Tourism', shortDescription: 'This Blog covers about Tourism in TamilNadu and must watch places.', fullDescription: '' }
+  ]);
+
+  const [newBlog, setNewBlog] = useState({ blogTitle: '', shortDescription: '', description: '' });
+
+  useEffect(() => {
+    displayPost();
+  }, []);
+
+  const displayPost = () => {
+    return (
+      <div id="blogCards">
+        {posts.map((blog) => (
+          <div key={blog.blogTitle} className="card" style={{ width: 200, display: 'inline-block' }}>
+            <div className="card-body">
+              <h5 className="card-title">{blog.blogTitle}</h5>
+              <p className="card-text">{blog.shortDescription}</p>
+              <button className="btn btn-outline-primary more">Click to Know More</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const handleSubmitBlog = (event) => {
+    event.preventDefault();
+    if (!newBlog.blogTitle || !newBlog.shortDescription || !newBlog.description) {
+      alert('Please fill out all fields');
+      return;
+    }
+    setPosts([...posts, newBlog]);
+    setNewBlog({ blogTitle: '', shortDescription: '', description: '' });
+  };
+
+  const handleInputChange = (event) => {
+    setNewBlog({ ...newBlog, [event.target.name]: event.target.value });
+  };
+
+  return (
+    <div>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <a className="navbar-brand" href="#">
+          Blog Creator
+        </a>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <form onSubmit={handleSubmitBlog}>
+            <button className="btn btn-outline-success my-2 my-sm-0 addBlog" onClick={() => document.getElementById('addBlogPanel').style.display = 'block'}>
+              Add Blog
+            </button>
+          </form>
+        </div>
+      </nav>
+      {displayPost()}
+      {newBlog.blogTitle ? (
+        <div id="addBlogPanel" style={{ display: 'block' }}>
+          <form onSubmit={handleSubmitBlog}>
+            <div className="mb-3">
+              <label for="exampleInputEmail1" className="form-label">
+                Email address
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="blogTitle"
+                value={newBlog.blogTitle}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="mb-3">
+              <label for="exampleInputPassword1" className="form-label">
+                Password
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="blogShortDescription"
+                value={newBlog.shortDescription}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="mb-3 form-check">
+              <label for="exampleInputPassword1" className="form-label">
+                Password
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="description"
+                value={newBlog.description}
+                onChange={handleInputChange}
+              />
+            </div>
+            <button type="submit" className="btn btn-outline-success submitBlog">
+              Submit
+            </button>
+          </form>
+        </div>
+      ) : null}
+      <footer className="bg-body-tertiary text-center text-lg-start">
+        <div
+          className="text-center p-3"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}
+        >
+          <a className="text-body" href="#">
+            Blog Creator
+          </a>
+        </div>
+      </footer>
+    </div>
+  );
+};
